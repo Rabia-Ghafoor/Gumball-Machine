@@ -8,8 +8,10 @@ import java.util.List;
 
 public interface IGumballService {
     TransitionResult insertQuarter(String id) throws IOException;
-    TransitionResult ejectQuarter(String id);
-    TransitionResult turnCrank(String id);
+    TransitionResult ejectQuarter(String id) throws IOException;
+    TransitionResult turnCrank(String id) throws IOException;
+
+    TransitionResult dispense() throws IOException;
     
     List<GumballMachineRecord> findAll() throws IOException;
 

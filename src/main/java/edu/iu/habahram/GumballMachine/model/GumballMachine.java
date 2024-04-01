@@ -58,20 +58,53 @@ public class GumballMachine implements IGumballMachine {
 
         boolean succeeded = false;
         String message = "";
-        if (state.equalsIgnoreCase(HAS_QUARTER)) {
+        String stateAfterTheAttempt = null;
+        if (state.equalsIgnoreCase(SOLD)) {
             state = SOLD;
             message = "You turned...";
             succeeded = true;
-            dispense();
+
         } else if (state.equalsIgnoreCase(NO_QUARTER)) {
             message = "You turned but there's no quarter";
         } else if (state.equalsIgnoreCase(SOLD_OUT)) {
             message = "You turned but there are no gumballs";
         } else if (state.equalsIgnoreCase(SOLD)) {
             message = "Turning twice doesn't get you another gumball!";
-        }
-        return new TransitionResult(succeeded, message, state, count);
 
+            state = SOLD;
+            return dispense();
+        }
+    stateAfterTheAttempt =state;
+    return new TransitionResult (succeeded, message, stateAfterTheAttempt, count);
+
+    }
+
+    @Override
+    public TransitionResult dispense(){
+        boolean succeeded = false;
+        String message = "";
+        String stateAfterDispense = null;
+
+        if (state.equalsIgnoreCase(SOLD)) {
+            message = "A gumball comes rolling out the slot";
+            count -= 1; // Reduce the count of available gumballs
+            if (count == 0) {
+                message += ", Oops, out of gumballs!";
+                state = SOLD_OUT;
+            } else {
+                state = NO_QUARTER;
+            }
+            succeeded = true;
+        } else if (state.equalsIgnoreCase(NO_QUARTER)) {
+            message = "You need to pay first";
+        } else if (state.equalsIgnoreCase(SOLD_OUT)) {
+            message = "No gumball dispensed";
+        } else if (state.equalsIgnoreCase(HAS_QUARTER)) {
+            message = "Turn the crank to get a gumball";
+        }
+
+        stateAfterDispense = state;
+        return new TransitionResult(succeeded, message, stateAfterDispense, count);
 
     }
 
