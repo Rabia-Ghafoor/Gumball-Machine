@@ -2,20 +2,39 @@ package edu.iu.habahram.GumballMachine.model;
 
 public class SoldState implements  IState{
 
+    IGumballMachine gumballMachine;
+    public SoldState(IGumballMachine gumballMachine) {
+        this.gumballMachine = gumballMachine;
+    }
+    @Override
     public TransitionResult insertQuarter() {
-        return new TransitionResult("You can't insert a quarter, you already have one", false);
+        String message = "Please wait, we're already giving you a gumball";
+        boolean succeeded = false;
+        return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), gumballMachine.getCount());
     }
-
+    @Override
     public TransitionResult ejectQuarter() {
-        return new TransitionResult("Sorry, you already turned the crank", false);
+        String message = "Sorry, you already turned the crank";
+        boolean succeeded = false;
+        return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), gumballMachine.getCount());
     }
-
+    @Override
     public TransitionResult turnCrank() {
-        return new TransitionResult("Turning twice doesn't get you another gumball!", false);
+        String message = "Turning twice doesn't get you another gumball!";
+        boolean succeeded = false;
+        return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), gumballMachine.getCount());
     }
-
+    @Override
     public TransitionResult dispense() {
-        return new TransitionResult("A gumball comes rolling out the slot...", true);
+        gumballMachine.releaseBall();
+        if (gumballMachine.getCount() > 0) {
+            gumballMachine.changeTheStateTo(GumballMachineState.NO_QUARTER);
+        } else {
+            gumballMachine.changeTheStateTo(GumballMachineState.OUT_OF_GUMBALLS);
+        }
+        String message = "A gumball comes rolling out the slot";
+        boolean succeeded = true;
+        return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), gumballMachine.getCount());
     }
 
     public String getTheName() {

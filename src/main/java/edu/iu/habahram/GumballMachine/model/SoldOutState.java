@@ -7,18 +7,35 @@ public class SoldOutState implements IState {
         this.gumballMachine = gumballMachine;
     }
 
+    @Override
     public TransitionResult insertQuarter() {
-        return new TransitionResult("No gumball available", false);
+        String message = "You can't insert a quarter, the machine is sold out";
+        boolean succeeded = false;
+        return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), gumballMachine.getCount());
     }
+
+    @Override
     public TransitionResult ejectQuarter() {
-        return new TransitionResult("No quarter inserted", false);
+        String message = "You can't eject, you haven't inserted a quarter yet";
+        boolean succeeded = false;
+        return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), gumballMachine.getCount());
     }
+
+    @Override
     public TransitionResult turnCrank() {
-        return new TransitionResult("No gumball available", false);
+        String message = "You turned, but there are no gumballs";
+        boolean succeeded = false;
+        return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), gumballMachine.getCount());
     }
+
+    @Override
     public TransitionResult dispense() {
-        return new TransitionResult("No gumball available", false);
+        String message = "No gumball dispensed";
+        boolean succeeded = false;
+        return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), gumballMachine.getCount());
     }
+
+
 
     public String getTheName() {
         return GumballMachineState.OUT_OF_GUMBALLS.name();
